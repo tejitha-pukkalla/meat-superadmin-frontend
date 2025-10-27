@@ -10,12 +10,15 @@ import {
   LayoutDashboard, 
   Settings, 
   Bell,
-  Package // NEW: Import Package icon
+  Package,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 
 const ProtectedRoute = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [user, setUser] = useState(null);
+  const [openMenu, setOpenMenu] = useState(null); 
   const token = localStorage.getItem('superAdminToken');
 
   useEffect(() => {
@@ -37,19 +40,32 @@ const ProtectedRoute = () => {
     }
   };
 
-  // Updated menu items with Categories and Subcategories
+  // ✅ Menu Items (with submenu)
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Store, label: 'Vendors', path: '/vendors' },
-    { icon: Package, label: 'Categories', path: '/categories' },        // NEW
-    { icon: Package, label: 'Subcategories', path: '/subcategories' }, // NEW
+    {
+      icon: Package,
+      label: 'Categories',
+      children: [
+        { label: 'All Categories', path: '/categories' },
+        { label: 'Subcategories', path: '/subcategories' },
+      ],
+    },
+    { icon: Package, label: 'Products', path: '/products' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
+
+  const handleToggle = (label) => {
+    setOpenMenu(openMenu === label ? null : label);
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-red-600 transition-all duration-300 overflow-hidden`}>
+      <div
+        className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-red-600 transition-all duration-300 overflow-hidden`}
+      >
         <div className="h-full flex flex-col">
           {/* Logo */}
           <div className="p-6 border-b border-red-700">
@@ -70,6 +86,50 @@ const ProtectedRoute = () => {
               {menuItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = window.location.pathname === item.path;
+
+                // 👇 If the item has a submenu
+                if (item.children) {
+                  const isOpen = openMenu === item.label;
+                  return (
+                    <li key={index}>
+                      <button
+                        onClick={() => handleToggle(item.label)}
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-white hover:bg-red-700 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Icon size={20} />
+                          <span className="font-medium">{item.label}</span>
+                        </div>
+                        {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                      </button>
+
+                      {/* Submenu */}
+                      {isOpen && (
+                        <ul className="ml-10 mt-1 space-y-1 transition-all">
+                          {item.children.map((sub, i) => {
+                            const isSubActive = window.location.pathname === sub.path;
+                            return (
+                              <li key={i}>
+                                <a
+                                  href={sub.path}
+                                  className={`block px-3 py-2 rounded-md text-sm transition-colors ${
+                                    isSubActive
+                                      ? 'bg-white text-red-600'
+                                      : 'text-red-100 hover:bg-red-700'
+                                  }`}
+                                >
+                                  {sub.label}
+                                </a>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                }
+
+                // 👇 Normal menu item
                 return (
                   <li key={index}>
                     <a
@@ -133,7 +193,7 @@ const ProtectedRoute = () => {
                 <Bell size={20} />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full"></span>
               </button>
-              
+
               <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
                 <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
                   <span className="text-white font-bold">

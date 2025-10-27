@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Vendors from './components/Vendors';
 import CategoryList from './components/categories/CategoryList';
 import SubcategoryList from './components/categories/SubcategoryList';
+import ProductManagement from './pages/ProductManagement';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -30,6 +31,11 @@ function App() {
           <Route path="/categories" element={<CategoryList />} />
           <Route path="/subcategories" element={<SubcategoryList />} />
           
+
+             {/* Product Management Route - NEW */}
+          <Route path="/products" element={<ProductManagement />} />
+
+
           {/* Settings Route */}
           <Route path="/settings" element={
             <div className="p-6">
