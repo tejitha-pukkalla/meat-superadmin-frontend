@@ -12,7 +12,13 @@ import {
   Bell,
   Package,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Users,       
+  LifeBuoy,    
+  FileText,
+  ShoppingCart,
+  DollarSign,
+  BarChart3
 } from 'lucide-react';
 
 const ProtectedRoute = () => {
@@ -40,21 +46,77 @@ const ProtectedRoute = () => {
     }
   };
 
-  // ✅ Menu Items (with submenu)
+  
+// Menu Items with submenu
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-    { icon: Store, label: 'Vendors', path: '/vendors' },
-    {
-      icon: Package,
-      label: 'Categories',
-      children: [
-        { label: 'All Categories', path: '/categories' },
+    
+    // VENDOR MANAGEMENT SUBMENU
+    { icon: Store, label: 'Vendor Management', children: [
+        { label: 'Vendor List', path: '/vendors' },
+        { label: 'Vendor Details', path: '/vendor-details', comingSoon: true },
+    ]},
+    
+    // CATEGORIES SUBMENU
+    { icon: FileText, label: 'Categories', children: [
+        { label: 'Category', path: '/categories' },
         { label: 'Subcategories', path: '/subcategories' },
-      ],
-    },
+    ]},
+    
+    // PRODUCTS (Separate)
     { icon: Package, label: 'Products', path: '/products' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
+    
+    // ORDER MANAGEMENT SUBMENU
+    { icon: ShoppingCart, label: 'Order Management', children: [
+        { label: 'All Orders', path: '/orders' },
+        { label: 'Order Disputes', path: '/order-disputes' },
+    ]},
+    
+    // CUSTOMER MANAGEMENT SUBMENU
+    { icon: Users, label: 'Customer Management', children: [
+        { label: 'All Customers', path: '/customers' },
+        { label: 'Customer Support', path: '/support-tickets' },
+        { label: 'Templates', path: '/templates' },
+    ]},
+
+    // // FINANCIAL MANAGEMENT (Coming Soon)
+    // { icon: DollarSign, label: 'Financial Management', path: '/financial', comingSoon: true },
+    // 7. FINANCIAL MANAGEMENT (Submenu - Detailed from the first list)
+    { 
+        icon: DollarSign, 
+        label: 'Financial Management', 
+        children: [
+            { label: 'Revenue & Analytics', path: '/finance/revenue',comingSoon: true  },
+            { label: 'Commission Settings', path: '/finance/commissions',comingSoon: true  },
+            { label: 'Vendor Payouts', path: '/finance/payouts',comingSoon: true  },
+            { label: 'Financial Reports', path: '/finance/reports',comingSoon: true  },
+        ]
+    },
+
+    // 8. REPORTS & ANALYTICS (Submenu - Added the full list from the first concept)
+    {
+        icon: BarChart3,
+        label: 'Reports & Analytics',
+        children: [
+            { label: 'Sales Reports', path: '/reports/sales',comingSoon: true  },
+            { label: 'Vendor Analytics', path: '/reports/vendor',comingSoon: true  },
+            { label: 'System Analytics', path: '/reports/system',comingSoon: true  },
+            { label: 'Custom Reports', path: '/reports/custom',comingSoon: true  },
+            { label: 'Audit Logs', path: '/reports/audit',comingSoon: true  },
+        ]
+    },
+    
+    // 9. NOTIFICATIONS (Direct Link) - Added back as a top-level item
+    { 
+        icon: Bell, 
+        label: 'Notifications', 
+        path: '/notifications', 
+        comingSoon: true 
+    },
+
+    { icon: Settings, label: 'Settings', path: '/settings',comingSoon: true  },
   ];
+
 
   const handleToggle = (label) => {
     setOpenMenu(openMenu === label ? null : label);

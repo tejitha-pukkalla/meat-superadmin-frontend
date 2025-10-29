@@ -1,214 +1,214 @@
-//this is orginal file 
-import { useState, useEffect } from 'react';
-import { vendorAPI } from '../api/api';
-import { Store, ShoppingCart, DollarSign, AlertCircle, TrendingUp } from 'lucide-react';
+// //this is orginal file 
+// import { useState, useEffect } from 'react';
+// import { vendorAPI } from '../api/api';
+// import { Store, ShoppingCart, DollarSign, AlertCircle, TrendingUp } from 'lucide-react';
 
-const Dashboard = () => {
-  const [stats, setStats] = useState({
-    totalVendors: 0,
-    activeVendors: 0,
-    pendingApprovals: 0,
-    totalOrders: 1247,
-    totalRevenue: 387650
-  });
-  const [recentVendors, setRecentVendors] = useState([]);
-  const [loading, setLoading] = useState(true);
+// const Dashboard = () => {
+//   const [stats, setStats] = useState({
+//     totalVendors: 0,
+//     activeVendors: 0,
+//     pendingApprovals: 0,
+//     totalOrders: 1247,
+//     totalRevenue: 387650
+//   });
+//   const [recentVendors, setRecentVendors] = useState([]);
+//   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+//   useEffect(() => {
+//     fetchDashboardData();
+//   }, []);
 
-  const fetchDashboardData = async () => {
-    setLoading(true);
-    try {
-      // Fetch all vendors
-      const allVendorsResponse = await vendorAPI.getAllVendors({ limit: 100 });
-      const vendors = allVendorsResponse.data.data;
+//   const fetchDashboardData = async () => {
+//     setLoading(true);
+//     try {
+//       // Fetch all vendors
+//       const allVendorsResponse = await vendorAPI.getAllVendors({ limit: 100 });
+//       const vendors = allVendorsResponse.data.data;
       
-      // Calculate stats
-      const activeCount = vendors.filter(v => v.status === 'active').length;
-      const pendingCount = vendors.filter(v => v.status === 'pending').length;
+//       // Calculate stats
+//       const activeCount = vendors.filter(v => v.status === 'active').length;
+//       const pendingCount = vendors.filter(v => v.status === 'pending').length;
       
-      setStats({
-        totalVendors: vendors.length,
-        activeVendors: activeCount,
-        pendingApprovals: pendingCount,
-        totalOrders: 1247,
-        totalRevenue: 387650
-      });
+//       setStats({
+//         totalVendors: vendors.length,
+//         activeVendors: activeCount,
+//         pendingApprovals: pendingCount,
+//         totalOrders: 1247,
+//         totalRevenue: 387650
+//       });
 
-      // Get recent vendors (last 4)
-      setRecentVendors(vendors.slice(0, 4));
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+//       // Get recent vendors (last 4)
+//       setRecentVendors(vendors.slice(0, 4));
+//     } catch (error) {
+//       console.error('Error fetching dashboard data:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+//   const getStatusColor = (status) => {
+//     switch (status) {
+//       case 'active': return 'bg-green-100 text-green-800';
+//       case 'pending': return 'bg-yellow-100 text-yellow-800';
+//       default: return 'bg-gray-100 text-gray-800';
+//     }
+//   };
 
-  const formatTime = (date) => {
-    const now = new Date();
-    const createdAt = new Date(date);
-    const diffInHours = Math.floor((now - createdAt) / (1000 * 60 * 60));
+//   const formatTime = (date) => {
+//     const now = new Date();
+//     const createdAt = new Date(date);
+//     const diffInHours = Math.floor((now - createdAt) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-  };
+//     if (diffInHours < 1) return 'Just now';
+//     if (diffInHours < 24) return `${diffInHours} hours ago`;
+//     const diffInDays = Math.floor(diffInHours / 24);
+//     return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+//   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-      </div>
-    );
-  }
+//   if (loading) {
+//     return (
+//       <div className="flex justify-center items-center h-screen">
+//         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+//       </div>
+//     );
+//   }
 
-  return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, Super Admin! 👋
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Here's what's happening with your platform today
-        </p>
-      </div>
+//   return (
+//     <div className="p-6">
+//       {/* Header */}
+//       <div className="mb-8">
+//         <h1 className="text-3xl font-bold text-gray-900">
+//           Welcome back, Super Admin! 👋
+//         </h1>
+//         <p className="text-gray-600 mt-2">
+//           Here's what's happening with your platform today
+//         </p>
+//       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {/* Total Vendors */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Store className="text-blue-600" size={24} />
-            </div>
-            <span className="text-green-600 text-sm font-semibold">+12%</span>
-          </div>
-          <div>
-            <p className="text-gray-600 text-sm mb-1">Total Vendors</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.totalVendors}</p>
-            <p className="text-gray-500 text-xs mt-2">{stats.activeVendors} active vendors</p>
-          </div>
-        </div>
+//       {/* Stats Grid */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+//         {/* Total Vendors */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <div className="flex items-center justify-between mb-4">
+//             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+//               <Store className="text-blue-600" size={24} />
+//             </div>
+//             <span className="text-green-600 text-sm font-semibold">+12%</span>
+//           </div>
+//           <div>
+//             <p className="text-gray-600 text-sm mb-1">Total Vendors</p>
+//             <p className="text-3xl font-bold text-gray-900">{stats.totalVendors}</p>
+//             <p className="text-gray-500 text-xs mt-2">{stats.activeVendors} active vendors</p>
+//           </div>
+//         </div>
 
-        {/* Total Orders */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <ShoppingCart className="text-green-600" size={24} />
-            </div>
-            <span className="text-green-600 text-sm font-semibold">+8%</span>
-          </div>
-          <div>
-            <p className="text-gray-600 text-sm mb-1">Total Orders</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.totalOrders}</p>
-            <p className="text-gray-500 text-xs mt-2">Last 30 days</p>
-          </div>
-        </div>
+//         {/* Total Orders */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <div className="flex items-center justify-between mb-4">
+//             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+//               <ShoppingCart className="text-green-600" size={24} />
+//             </div>
+//             <span className="text-green-600 text-sm font-semibold">+8%</span>
+//           </div>
+//           <div>
+//             <p className="text-gray-600 text-sm mb-1">Total Orders</p>
+//             <p className="text-3xl font-bold text-gray-900">{stats.totalOrders}</p>
+//             <p className="text-gray-500 text-xs mt-2">Last 30 days</p>
+//           </div>
+//         </div>
 
-        {/* Total Revenue */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="text-purple-600" size={24} />
-            </div>
-            <span className="text-green-600 text-sm font-semibold">+15%</span>
-          </div>
-          <div>
-            <p className="text-gray-600 text-sm mb-1">Total Revenue</p>
-            <p className="text-3xl font-bold text-gray-900">₹{stats.totalRevenue.toLocaleString()}</p>
-            <p className="text-gray-500 text-xs mt-2">All time revenue</p>
-          </div>
-        </div>
+//         {/* Total Revenue */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <div className="flex items-center justify-between mb-4">
+//             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+//               <DollarSign className="text-purple-600" size={24} />
+//             </div>
+//             <span className="text-green-600 text-sm font-semibold">+15%</span>
+//           </div>
+//           <div>
+//             <p className="text-gray-600 text-sm mb-1">Total Revenue</p>
+//             <p className="text-3xl font-bold text-gray-900">₹{stats.totalRevenue.toLocaleString()}</p>
+//             <p className="text-gray-500 text-xs mt-2">All time revenue</p>
+//           </div>
+//         </div>
 
-        {/* Pending Approvals */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <AlertCircle className="text-yellow-600" size={24} />
-            </div>
-            <span className="text-yellow-600 text-sm font-semibold">{stats.pendingApprovals}</span>
-          </div>
-          <div>
-            <p className="text-gray-600 text-sm mb-1">Pending Approvals</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.pendingApprovals}</p>
-            <p className="text-gray-500 text-xs mt-2">Vendors awaiting review</p>
-          </div>
-        </div>
-      </div>
+//         {/* Pending Approvals */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <div className="flex items-center justify-between mb-4">
+//             <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+//               <AlertCircle className="text-yellow-600" size={24} />
+//             </div>
+//             <span className="text-yellow-600 text-sm font-semibold">{stats.pendingApprovals}</span>
+//           </div>
+//           <div>
+//             <p className="text-gray-600 text-sm mb-1">Pending Approvals</p>
+//             <p className="text-3xl font-bold text-gray-900">{stats.pendingApprovals}</p>
+//             <p className="text-gray-500 text-xs mt-2">Vendors awaiting review</p>
+//           </div>
+//         </div>
+//       </div>
 
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Platform Commission */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Platform Commission</h2>
+//       {/* Two Column Layout */}
+//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//         {/* Platform Commission */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <h2 className="text-lg font-bold text-gray-900 mb-6">Platform Commission</h2>
           
-          <div className="space-y-4">
-            <div className="bg-blue-50 rounded-lg p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Commission per Order</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">₹20</p>
-              </div>
-              <DollarSign className="text-blue-600" size={32} />
-            </div>
+//           <div className="space-y-4">
+//             <div className="bg-blue-50 rounded-lg p-4 flex items-center justify-between">
+//               <div>
+//                 <p className="text-sm text-gray-600">Commission per Order</p>
+//                 <p className="text-2xl font-bold text-gray-900 mt-1">₹20</p>
+//               </div>
+//               <DollarSign className="text-blue-600" size={32} />
+//             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-green-50 rounded-lg p-4">
-                <p className="text-xs text-gray-600 mb-1">Delivery Partner</p>
-                <p className="text-xl font-bold text-gray-900">₹10</p>
-              </div>
-              <div className="bg-green-50 rounded-lg p-4">
-                <p className="text-xs text-gray-600 mb-1">Platform Profit</p>
-                <p className="text-xl font-bold text-gray-900">₹10</p>
-              </div>
-            </div>
-          </div>
-        </div>
+//             <div className="grid grid-cols-2 gap-4">
+//               <div className="bg-green-50 rounded-lg p-4">
+//                 <p className="text-xs text-gray-600 mb-1">Delivery Partner</p>
+//                 <p className="text-xl font-bold text-gray-900">₹10</p>
+//               </div>
+//               <div className="bg-green-50 rounded-lg p-4">
+//                 <p className="text-xs text-gray-600 mb-1">Platform Profit</p>
+//                 <p className="text-xl font-bold text-gray-900">₹10</p>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
 
-        {/* Recent Vendors */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Recent Vendors</h2>
+//         {/* Recent Vendors */}
+//         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+//           <h2 className="text-lg font-bold text-gray-900 mb-6">Recent Vendors</h2>
           
-          <div className="space-y-4">
-            {recentVendors.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No vendors yet</p>
-            ) : (
-              recentVendors.map((vendor) => (
-                <div key={vendor._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <Store className="text-red-600" size={20} />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{vendor.name}</p>
-                      <p className="text-xs text-gray-500">{formatTime(vendor.createdAt)}</p>
-                    </div>
-                  </div>
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getStatusColor(vendor.status)}`}>
-                    {vendor.status}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//           <div className="space-y-4">
+//             {recentVendors.length === 0 ? (
+//               <p className="text-gray-500 text-center py-8">No vendors yet</p>
+//             ) : (
+//               recentVendors.map((vendor) => (
+//                 <div key={vendor._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+//                   <div className="flex items-center gap-3">
+//                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+//                       <Store className="text-red-600" size={20} />
+//                     </div>
+//                     <div>
+//                       <p className="font-semibold text-gray-900">{vendor.name}</p>
+//                       <p className="text-xs text-gray-500">{formatTime(vendor.createdAt)}</p>
+//                     </div>
+//                   </div>
+//                   <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getStatusColor(vendor.status)}`}>
+//                     {vendor.status}
+//                   </span>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-export default Dashboard;
+// export default Dashboard;
 // this is original file 
 
 
@@ -1071,3 +1071,419 @@ export default Dashboard;
 // export default SuperAdminDashboard;
 
 // static dashboard 
+
+
+
+
+import { useState, useEffect } from 'react';
+import { 
+  Store, 
+  ShoppingCart, 
+  DollarSign, 
+  AlertCircle, 
+  TrendingUp, 
+  Package, 
+  Users, 
+  ArrowUpRight, 
+  ArrowDownRight,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Eye,
+  Activity
+} from 'lucide-react';
+import { vendorAPI, categoryAPI } from '../api/api';
+
+const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalVendors: 0,
+    activeVendors: 0,
+    pendingVendors: 0,
+    inactiveVendors: 0,
+    totalCategories: 0,
+    totalSubcategories: 0,
+    totalOrders: 1247, // Static (coming soon)
+    totalRevenue: 387650, // Static (coming soon)
+    platformProfit: 125400 // Static (coming soon)
+  });
+
+  const [recentVendors, setRecentVendors] = useState([]);
+  const [categoryStats, setCategoryStats] = useState([]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      // Fetch vendors
+      const vendorsResponse = await vendorAPI.getAllVendors({ limit: 100 });
+      const vendors = vendorsResponse.data.data;
+
+      // Calculate vendor stats
+      const activeCount = vendors.filter(v => v.status === 'active').length;
+      const pendingCount = vendors.filter(v => v.status === 'pending').length;
+      const inactiveCount = vendors.filter(v => v.status === 'inactive').length;
+
+      // Fetch categories
+      const categoriesResponse = await categoryAPI.getAllCategories();
+      const categories = categoriesResponse.data.data;
+
+      // Calculate subcategories
+      const totalSubcategories = categories.reduce((acc, cat) => 
+        acc + (cat.subcategories?.length || 0), 0
+      );
+
+      // Prepare category stats with colors
+      // Using a consistent palette for better visual hierarchy
+      const colors = [
+        'bg-indigo-500', 'bg-red-500', 'bg-green-500', 
+        'bg-yellow-500', 'bg-purple-500', 'bg-orange-500'
+      ];
+      const categoryStatsData = categories.slice(0, 6).map((cat, index) => ({
+        name: cat.name,
+        subcategories: cat.subcategories?.length || 0,
+        color: colors[index % colors.length]
+      }));
+
+      setStats({
+        totalVendors: vendors.length,
+        activeVendors: activeCount,
+        pendingVendors: pendingCount,
+        inactiveVendors: inactiveCount,
+        totalCategories: categories.length,
+        totalSubcategories: totalSubcategories,
+        totalOrders: 1247,
+        totalRevenue: 387650,
+        platformProfit: 125400
+      });
+
+      // Get recent 4 vendors
+      setRecentVendors(vendors.slice(0, 4));
+      setCategoryStats(categoryStatsData);
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusColor = (status) => {
+    const colors = {
+      active: 'bg-green-100 text-green-800 border-green-200',
+      delivered: 'bg-green-100 text-green-800 border-green-200',
+      pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      processing: 'bg-blue-100 text-blue-800 border-blue-200',
+      inactive: 'bg-gray-100 text-gray-800 border-gray-200'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800 border-gray-200';
+  };
+
+  const formatTime = (date) => {
+    const now = new Date();
+    const createdAt = new Date(date);
+    const diffInHours = Math.floor((now - createdAt) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+  };
+
+  // Static data for orders (coming soon)
+  const recentOrders = [
+    { id: '#ORD-1247', customer: 'Rahul Sharma', amount: 2450, status: 'delivered', time: '15 min ago' },
+    { id: '#ORD-1246', customer: 'Priya Singh', amount: 1890, status: 'processing', time: '1 hour ago' },
+    { id: '#ORD-1245', customer: 'Amit Patel', amount: 3200, status: 'delivered', time: '2 hours ago' },
+    { id: '#ORD-1244', customer: 'Sneha Reddy', amount: 1650, status: 'pending', time: '3 hours ago' }
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6 sm:p-8">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold text-gray-900 mb-1">
+              Welcome back, Super Admin! 👋
+            </h1>
+            <p className="text-gray-600">
+              Here's what's happening with your platform today
+            </p>
+          </div>
+          <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200">
+            <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-700">All Systems Operational</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
+        {/* Total Vendors - REAL DATA */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+              <Store className="text-indigo-600" size={24} />
+            </div>
+            <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+              <ArrowUpRight size={16} />
+              <span>Live</span>
+            </div>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm font-medium">Total Vendors</p>
+            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalVendors}</p>
+            <div className="flex items-center gap-2 text-xs mt-2">
+              <span className="text-green-600 font-medium">{stats.activeVendors} active</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-yellow-600 font-medium">{stats.pendingVendors} pending</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Orders - STATIC */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-200 relative">
+          <div className="absolute top-3 right-3 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-semibold">
+            Coming Soon
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <ShoppingCart className="text-green-600" size={24} />
+            </div>
+            <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+              <ArrowUpRight size={16} />
+              <span>+8%</span>
+            </div>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm font-medium">Total Orders</p>
+            <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalOrders}</p>
+            <p className="text-xs text-gray-500 mt-2">Last 30 days</p>
+          </div>
+        </div>
+
+        {/* Total Revenue - STATIC */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-200 relative">
+          <div className="absolute top-3 right-3 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-semibold">
+            Coming Soon
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+              <DollarSign className="text-purple-600" size={24} />
+            </div>
+            <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+              <ArrowUpRight size={16} />
+              <span>+15%</span>
+            </div>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm font-medium">Total Revenue</p>
+            <p className="text-3xl font-bold text-gray-900 mt-1">₹{stats.totalRevenue.toLocaleString()}</p>
+            <p className="text-xs text-gray-500 mt-2">All time revenue</p>
+          </div>
+        </div>
+
+        {/* Platform Profit - STATIC */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-200 relative">
+          <div className="absolute top-3 right-3 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-semibold">
+            Coming Soon
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+              <TrendingUp className="text-orange-600" size={24} />
+            </div>
+            <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+              <ArrowUpRight size={16} />
+              <span>+12%</span>
+            </div>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm font-medium">Platform Profit</p>
+            <p className="text-3xl font-bold text-gray-900 mt-1">₹{stats.platformProfit.toLocaleString()}</p>
+            <p className="text-xs text-gray-500 mt-2">After commissions</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Secondary Stats - Condensed & Accented */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+        {/* Categories - REAL DATA */}
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-pink-500">
+          <div className="flex items-center justify-between">
+            <Package size={24} className="text-pink-500" />
+            <span className="text-xs text-gray-500 font-medium">Live Data</span>
+          </div>
+          <p className="text-4xl font-bold text-gray-900 mt-2">{stats.totalCategories}</p>
+          <p className="text-sm text-gray-600">Total Categories</p>
+        </div>
+
+        {/* Subcategories - REAL DATA */}
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+          <div className="flex items-center justify-between">
+            <Package size={24} className="text-purple-500" />
+            <span className="text-xs text-gray-500 font-medium">Live Data</span>
+          </div>
+          <p className="text-4xl font-bold text-gray-900 mt-2">{stats.totalSubcategories}</p>
+          <p className="text-sm text-gray-600">Total Subcategories</p>
+        </div>
+
+        {/* Pending Approvals - REAL DATA */}
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+          <div className="flex items-center justify-between">
+            <AlertCircle size={24} className="text-yellow-500" />
+            <span className="text-xs text-gray-500 font-medium">Live Data</span>
+          </div>
+          <p className="text-4xl font-bold text-gray-900 mt-2">{stats.pendingVendors}</p>
+          <p className="text-sm text-gray-600">Pending Approvals</p>
+        </div>
+      </div>
+
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        
+        {/* Platform Commission - SIMPLIFIED */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">Platform Commission</h2>
+            <DollarSign className="text-indigo-600" size={24} />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
+              <p className="text-sm text-blue-700 font-medium mb-1">Commission per Order</p>
+              <p className="text-3xl font-bold text-blue-900">₹20</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                <p className="text-xs text-green-700 font-medium mb-1">Delivery Partner</p>
+                <p className="text-xl font-bold text-green-900">₹10</p>
+              </div>
+              <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                <p className="text-xs text-purple-700 font-medium mb-1">Platform Profit</p>
+                <p className="text-xl font-bold text-purple-900">₹10</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Vendors - REAL DATA */}
+        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-900">Recent Vendors</h2>
+            <span className="bg-indigo-100 text-indigo-700 text-xs px-3 py-1 rounded-full font-medium">
+              View All
+            </span>
+          </div>
+          
+          <div className="space-y-3">
+            {recentVendors.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No vendors yet</p>
+            ) : (
+              recentVendors.map((vendor) => (
+                <div key={vendor._id} className="flex items-center justify-between p-3 bg-white rounded-lg hover:bg-gray-50 transition-all duration-200 border border-gray-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <Store className="text-gray-600" size={18} />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">{vendor.name}</p>
+                      <p className="text-xs text-gray-500">{formatTime(vendor.createdAt)}</p>
+                    </div>
+                  </div>
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getStatusColor(vendor.status)}`}>
+                    {vendor.status}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Category Stats - REAL DATA - Cleaned up */}
+      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">Category Overview</h2>
+          <span className="bg-indigo-100 text-indigo-700 text-xs px-3 py-1 rounded-full font-medium">
+            Live Data
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categoryStats.map((category, index) => (
+            <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-100 hover:bg-gray-100 transition-all duration-200">
+              <div className="flex items-center justify-between mb-3">
+                {/* Use the color prop for the icon wrapper background */}
+                <div className={`w-8 h-8 ${category.color} rounded-full flex items-center justify-center shadow-sm`}>
+                  <Package className="text-white" size={16} />
+                </div>
+                <span className="text-lg font-bold text-gray-900">{category.subcategories}</span>
+              </div>
+              <p className="text-sm font-semibold text-gray-900 truncate">{category.name}</p>
+              <p className="text-xs text-gray-500">Subcategories</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Orders - STATIC (Coming Soon) - Simplified Table */}
+      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 relative">
+        <div className="absolute top-4 right-4 bg-yellow-100 text-yellow-700 text-xs px-3 py-1.5 rounded-full font-semibold">
+          Coming Soon
+        </div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Orders</h2>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200 bg-gray-50">
+                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 rounded-tl-lg">Order ID</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Customer</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Amount</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Status</th>
+                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 rounded-tr-lg">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentOrders.map((order) => (
+                <tr key={order.id} className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
+                  <td className="py-3.5 px-4">
+                    <span className="font-medium text-indigo-600 hover:underline cursor-pointer">{order.id}</span>
+                  </td>
+                  <td className="py-3.5 px-4 text-gray-700">{order.customer}</td>
+                  <td className="py-3.5 px-4">
+                    <span className="font-semibold text-gray-900">₹{order.amount.toLocaleString()}</span>
+                  </td>
+                  <td className="py-3.5 px-4">
+                    {/* Re-using getStatusColor, but added 'delivered' and 'processing' to the function */}
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-4 text-sm text-gray-500">{order.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

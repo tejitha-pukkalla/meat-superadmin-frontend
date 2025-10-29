@@ -7,6 +7,13 @@ import CategoryList from './components/categories/CategoryList';
 import SubcategoryList from './components/categories/SubcategoryList';
 import ProductManagement from './pages/ProductManagement';
 import ProtectedRoute from './components/ProtectedRoute';
+import CustomerManagement from './pages/CustomerManagement';
+import CustomerDetails from './pages/CustomerDetails'; 
+import SupportTickets from './pages/SupportTickets';
+import TicketDetails from './pages/TicketDetails';
+import ResponseTemplates from './pages/ResponseTemplates';
+
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -34,6 +41,15 @@ function App() {
 
              {/* Product Management Route - NEW */}
           <Route path="/products" element={<ProductManagement />} />
+
+          {/*  CUSTOMER MANAGEMENT ROUTES  */}
+          <Route path="/customers" element={<CustomerManagement />} />
+          <Route path="/customers/:id" element={<CustomerDetails />} />
+
+          {/*  SUPPORT MANAGEMENT ROUTES  */}
+          <Route path="/support-tickets" element={<SupportTickets />} />
+          <Route path="/support-tickets/:id" element={<TicketDetails />} />
+          <Route path="/templates" element={<ResponseTemplates />} />
 
 
           {/* Settings Route */}
